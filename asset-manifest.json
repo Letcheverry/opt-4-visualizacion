@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.js": "/opt-4-visualizacion/static/js/main.cd5370f8.js",
+    "static/js/787.ff93c72e.chunk.js": "/opt-4-visualizacion/static/js/787.ff93c72e.chunk.js",
+    "static/media/SolotodoGpuList.csv": "/opt-4-visualizacion/static/media/SolotodoGpuList.28d14ceb4aaab8516f02.csv",
+    "index.html": "/opt-4-visualizacion/index.html",
+    "main.cd5370f8.js.map": "/opt-4-visualizacion/static/js/main.cd5370f8.js.map",
+    "787.ff93c72e.chunk.js.map": "/opt-4-visualizacion/static/js/787.ff93c72e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.cd5370f8.js"
+  ]
+}

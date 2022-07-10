@@ -1,4 +1,5 @@
 {
+  "homepage": "https://Letcheverry.github.io/opt-4-visualizacion",
   "name": "opt-4-visualizacion",
   "version": "0.1.0",
   "private": true,
@@ -10,9 +11,13 @@
     "@types/node": "^16.11.43",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "csvtojson": "^2.0.10",
+    "lodash": "^4.17.21",
+    "papaparse": "^5.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "reaviz": "^13.1.4",
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4"
   },
@@ -39,5 +44,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@types/papaparse": "^5.3.2",
+    "@types/react-vis": "^1.11.11",
+    "gh-pages": "^4.0.0"
   }
 }

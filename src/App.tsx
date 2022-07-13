@@ -1,10 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import Papa from "papaparse"
-import {Bar, BarChart, BarSeries, Gradient, GradientStop, GuideBar, RangeLines, schemes} from "reaviz";
-import {multiCategory} from "reaviz/dist/demo";
-import * as lodash from 'lodash'
-import {chain,uniqBy} from "lodash";
+import {ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ZAxis} from 'recharts';
+import './styles.css'
 
+import {
+    Bar,
+    BarChart,
+    BarSeries,
+    Gradient,
+    GradientStop,
+    GuideBar,
+    RangeLines
+} from "reaviz";
+
+import * as lodash from 'lodash'
+import {chain, fill, uniqBy} from "lodash";
+import parse from 'date-fns/parse'
 
 interface Gpus {
     "id": string,
@@ -21,6 +32,7 @@ function App() {
     const [gpus, setGpus] = useState<Array<Gpus>>([])
     const [cards, setCards ] = useState<Array<any>>([])
     const [options, setOptions] = useState<Array<string>>([])
+    const [scatter, setScatter] = useState<Array<any>>([])
 
     const [cardName,setCardName] = useState<string>('NVIDIA GeForce GTX 1050 Ti')
 
@@ -30,14 +42,19 @@ function App() {
             header: true,
             download: true,
             complete: (Sdata) => {
-                setGpus(Sdata.data.map((el:any,index)=>({...el, id: index})) as Array<Gpus>)
+                setGpus(Sdata.data.map((el: any, index) => ({
+                    ...el,
+                    id: index,
+                    memory: `${el.memory}`.substring(0, 3).trim()
+                })) as Array<Gpus>)
+
             }
         })
 
     }, [])
 
-    useEffect(()=>{
-        if (gpus.length>0){
+    useEffect(() => {
+        if (gpus.length > 0) {
             const groupedByDates = chain(gpus)
                 .groupBy(gpu=>gpu.date)
                 .map((value, key) => ({
@@ -51,6 +68,16 @@ function App() {
             //set labels
             const Labels:Array<string> = uniqBy(gpus,el=>el.title).map(el=>el.title)
             setOptions(Labels)
+
+            const Crown = gpus.map((gpu, index) => ({
+                x: /*parse(gpu.date, 'd-M-yyyy', new Date())*/ gpu.date,
+                y: Number(gpu.price),
+                z: Number(gpu.memory),
+            }));
+            console.log(Crown)
+            setScatter(Crown)
+
+
         }
     },[gpus,cardName])
 
@@ -60,15 +87,19 @@ function App() {
 
     return (
         <div className="App" style={{
-            margin:50
+            margin: 50,
+            alignContent: "center"
         }}>
-            <div>
-                <select name="Options" id="options2" onChange={(evt)=>{
+            <div style={{
+                margin: 50,
+                alignContent: "flex-start"
+            }}>
+                <select name="Options" id="options2" onChange={(evt) => {
                     setCardName(evt.target.value)
                 }}>
                     {
-                        options.map((option,key)=>(
-                           <option key={key} value={option}>{option} </option>
+                        options.map((option, key) => (
+                            <option key={key} value={option}>{option} </option>
 
                         ))
                     }
@@ -78,7 +109,6 @@ function App() {
 
             {
                 cards.length > 0 &&
-
 
 
                 <BarChart
@@ -93,10 +123,10 @@ function App() {
                             bar={
                                 <Bar gradient={<Gradient
                                     stops={[
-                                        <GradientStop offset="5%" stopOpacity={0.1} key="start" />,
-                                        <GradientStop offset="90%" stopOpacity={0.7} key="stop" />
+                                        <GradientStop offset="5%" stopOpacity={0.1} key="start"/>,
+                                        <GradientStop offset="90%" stopOpacity={0.7} key="stop"/>
                                     ]}
-                                />} rangeLines={<RangeLines position="top" strokeWidth={3} />} guide={<GuideBar />} />
+                                />} rangeLines={<RangeLines position="top" strokeWidth={3}/>} guide={<GuideBar/>}/>
                             }
                             colorScheme={"cybertron"}
                             padding={2}
@@ -105,6 +135,23 @@ function App() {
                 />
             }
 
+            <ResponsiveContainer width="100%" height="100%">
+                <ScatterChart
+                    margin={{
+                        top: 20,
+                        right: 20,
+                        bottom: 20,
+                        left: 20,
+                    }}
+                >
+                    <CartesianGrid/>
+                    <XAxis type="category" dataKey="x" name="Date" />
+                    <YAxis type="number" dataKey="y" name="Money" unit="$"/>
+                    <ZAxis type="number" dataKey="z" name="VRAM" unit="GB" />
+                    <Tooltip cursor={{stroke: 'red', strokeWidth: 2}}/>
+                    <Scatter name="GPU'S" data={scatter} fill="#8884d8"/>
+                </ScatterChart>
+            </ResponsiveContainer>
 
 
         </div>

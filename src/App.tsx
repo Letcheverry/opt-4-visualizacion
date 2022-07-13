@@ -69,7 +69,7 @@ function App() {
             const Labels:Array<string> = uniqBy(gpus,el=>el.title).map(el=>el.title)
             setOptions(Labels)
 
-            const Crown = gpus.map((gpu, index) => ({
+            const Crown = gpus.filter(el => el.title === cardName).map((gpu, index) => ({
                 x: /*parse(gpu.date, 'd-M-yyyy', new Date())*/ gpu.date,
                 y: Number(gpu.price),
                 z: Number(gpu.memory),
